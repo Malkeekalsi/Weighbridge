@@ -1,0 +1,187 @@
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+
+<div class="content" id="root">
+    <div class="p-grid">
+        <div class="p-col-9">
+            <div class="p-grid">
+                <div class="p-col">
+                    <p-fieldset legend="Weighing Data">
+                        <div class="p-field p-grid">
+                            <label for="grossWeight" class="p-col-fixed" style="width:150px">Gross Weight : </label>
+                            <div class="p-col">
+                                <input id="grossWeight" type="text" disabled="true" style="text-align: right;" [(ngModel)]="grossWeight" pInputText>
+                            </div>
+                        </div>
+                        <div class="p-field p-grid">
+                            <label for="tareWeight" class="p-col-fixed" style="width:150px">Tare Weight : </label>
+                            <div class="p-col">
+                                <input id="tareWeight" type="text" disabled="true" style="text-align: right;" [(ngModel)]="tareWeight" pInputText>
+                            </div>
+                            
+                        </div>
+                        <div class="p-field p-grid">
+                            <label for="netWeight" class="p-col-fixed" style="width:150px">Net Weight : </label>
+                            <div class="p-col">
+                                <input id="netWeight" type="text" disabled="true" style="text-align: right;" [(ngModel)]="netWeight" pInputText>
+                            </div>
+                        </div>
+
+                        <div class="p-field p-grid">
+                            <div class="p-mx-auto" style="display: inline-flex;">
+                            <div class="p-pr-4">Gross</div>
+                             <p-inputSwitch [(ngModel)]="weightType" [disabled]="isSecondWeight || !isAnyButtonClicked()"  (onChange)="onChangeWeightType($event)" ></p-inputSwitch>  <div class="p-pl-4">Tare</div>
+                             </div>
+                        </div>
+
+                        <div class="p-field p-grid">
+                            <div class="p-d-block p-mx-auto">
+                                <button pButton pRipple type="button" label="1st Weight" 
+                                [disabled]="(isSecondWeight || isManualWeight)"
+                                style="width:150px" (click)="onFirstWeightClick()"
+                                    class="p-mr-2 p-mb-2"></button>
+                                <button pButton pRipple type="button"
+                                    label="2nd Weight" style="width:150px" class="p-mr-2 p-mb-2"
+                                    [disabled]="(isFirstWeight || isManualWeight)"
+                                    (click)="onSecondWeightClick()"></button>
+                                <button pButton pRipple type="button" (click)="onManualWeightClick()"
+                                    [disabled]="(isFirstWeight || isSecondWeight)"
+                                    label="Manual" style="width:150px"
+                                    
+                                    class="p-mr-2 p-mb-2"></button>
+
+                            </div>
+                        </div>
+
+                        <div class="p-field p-grid">
+                            <div class="p-d-block p-mx-auto">
+                                <button pButton pRipple type="button" (click)="onReset()"
+                                    label="Reset" [disabled]="!isAnyButtonClicked()" style="width:150px" class="p-mb-2"></button>
+                            </div>
+                        </div>
+                    </p-fieldset>
+                </div>
+
+                <div class="p-col">
+                    <p-fieldset legend="Account Data">
+                        <div class="p-field p-grid">
+                            <label for="receiptNo" class="p-col-fixed" style="width:150px">Receipt No : </label>
+                            <div class="p-col">
+                                <input id="receiptNo" type="text" disabled="true" style="text-align: right;" [(ngModel)]="receiptNo" pInputText>
+                            </div>
+                        </div>
+                        <div class="p-field p-grid">
+                            <label for="truckNumber" class="p-col-fixed" style="width:150px">Truck No : </label>
+                            <div class="p-col">
+                                <input id="truckNumber" type="text" [disabled]="!isAnyButtonClicked()" [(ngModel)]="truckNumber" pInputText>
+                            </div>
+                        </div>
+                        <div class="p-field p-grid">
+                            <label for="party" class="p-col-fixed" style="width:150px">Purchaser : </label>
+                            <div class="p-col">
+                                <input id="purchaser" type="text" [disabled]="!isAnyButtonClicked()" [(ngModel)]="purchaser" pInputText>
+                            </div>
+                        </div>
+                        <div class="p-field p-grid">
+                            <label for="supplier" class="p-col-fixed" style="width:150px">Supplier : </label>
+                            <div class="p-col">
+                                <input id="Supplier" type="text" [disabled]="!isAnyButtonClicked()" [(ngModel)]="supplier"  pInputText>
+                            </div>
+                        </div>
+                        <div class="p-field p-grid">
+                            <label for="material" class="p-col-fixed" style="width:150px">Material : </label>
+                            <div class="p-col">
+                                <input id="material" type="text" [disabled]="!isAnyButtonClicked()" [(ngModel)]="material"  pInputText>
+                            </div>
+                        </div>
+
+                        <div class="p-field p-grid">
+                            <div class="p-d-block p-mx-auto">
+                                <button pButton pRipple type="button" [disabled]="!isAnyButtonClicked()" (click)="onSave()"
+                                    label="Save" style="width:150px" class="p-mb-2"></button>
+                            </div>
+                        </div>
+                    </p-fieldset>
+
+
+                </div>
+
+            </div>
+        </div>
+        <div class="p-col-3">
+            <p-fieldset legend="Camera Data">
+                <div class="p-grid">
+
+                    <div class="p-field p-grid">
+                        <div class="p-mx-auto" style="display: inline-flex;">
+                        <div class="p-pr-4">OFF</div>
+                         <p-inputSwitch [(ngModel)]="cameraStatus" (onChange)="handleCameraSwitch($event)" ></p-inputSwitch>  <div class="p-pl-4">ON</div>
+                         </div>
+                    </div>
+
+                    <div class="p-col">
+
+                        <img id="img" src="{{ imageData }}">
+                    </div>
+                    <div class="p-col">
+
+                        <img id="img1" src="{{ imageData1 }}">
+                    </div>
+                </div>
+            </p-fieldset>
+        </div>
+    </div>
+</div>
+
+
+
+<p-dialog header="Second Weightment" [(visible)]="displaySecondWeightSelectDialog"  [style]="{width: '90%'}" >
+    
+
+    <p-table [value]="secondWeightData" selectionMode="single" [(selection)]="selectedWeight" 
+    (onRowSelect)="onSecondWeightSelect($event)" dataKey="ReceiptNo">
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 3rem"></th>
+                <th>Receipt No</th>
+                <th>Vehicle No</th>
+                <th>Purchaser</th>
+                <th>Supplier</th>
+                <th>GrossWeight</th>
+                <th>TareWeight</th>
+                <th>Time</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-data let-expanded="expanded">
+            <tr [pSelectableRow]="data">
+                <td>
+                    <button type="button" pButton pRipple [pRowToggler]="data" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                </td>
+                <td>{{data.ReceiptNo}}</td>
+                <td>{{data.TruckNumber}}</td>
+                <td>{{data.Purchaser}}</td>
+                <td>{{data.Supplier}}</td>
+                <td>{{data.GrossWeight}}</td>
+                <td>{{data.TareWeight}}</td>
+                <td>{{data.firstWeightTime}}</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="rowexpansion" let-data>
+            <tr>
+                <td colspan="8">
+                    <table>
+                        <tr>
+                            <td> <img id="img" src="{{ data.firstWeightImage1 }}"><img id="img" src="{{ data.firstWeightImage2 }}"></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    
+
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" (click)="displaySecondWeightSelectDialog=false" label="Close" styleClass="p-button-text"></p-button>
+    </ng-template>
+
+</p-dialog>
