@@ -84,16 +84,22 @@ export interface TicketData {
 
       this.electronService.ipcRenderer.on("SaveData", function (evt, result) {
         if(result){
+          let receiptNo=me.receiptNo;
           me.confirmationService.confirm({
             message: 'Do you want to print the ticket?',
             accept: () => {
-              me.electronService.ipcRenderer.send("PrintTicket",me.receiptNo);
+              me.electronService.ipcRenderer.send("PrintTicket",receiptNo);
             }
         });
+        me.onReset();
         }
       });
       
-
+      let supplierMasterValues1= this.electronService.ipcRenderer.sendSync("loadSupplierData")
+      this.supplierMasterValues=[];
+      supplierMasterValues1.forEach(element => {
+        this.supplierMasterValues.push({label: element, value: element});
+      });
     }
 
     handleCameraSwitch(event){
@@ -121,9 +127,7 @@ export interface TicketData {
     }
 
     onSecondWeightClick(){
-      this.isSecondWeight=true;
-      this.isFirstWeight=false;
-      this.isManualWeight=false;
+     
       this.secondWeightData=this.electronService.ipcRenderer.sendSync("loadWeight2Data");
       this.displaySecondWeightSelectDialog=true;
 
@@ -139,7 +143,15 @@ export interface TicketData {
       this.receiptNo=this.getNextReceiptNo();
     }
 
+    supplierMasterValues: any[];
+
     onReset(){
+      let supplierMasterValues1= this.electronService.ipcRenderer.sendSync("loadSupplierData")
+      this.supplierMasterValues=[];
+      supplierMasterValues1.forEach(element => {
+        this.supplierMasterValues.push({label: element.DataValue, value: element.DataValue});
+      });
+
       this.isFirstWeight=false;
       this.isManualWeight=false;
       this.isSecondWeight=false;
@@ -158,6 +170,7 @@ export interface TicketData {
       this.imageDataSave2=this.imageData1;
 
       this.receiptNo=this.getNextReceiptNo();
+      this.selectedWeight=null;
       
     }
 
@@ -236,6 +249,10 @@ export interface TicketData {
 
       this.displaySecondWeightSelectDialog=false;
 
+
+      this.isSecondWeight=true;
+      this.isFirstWeight=false;
+      this.isManualWeight=false;
 
     }
 

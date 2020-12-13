@@ -25,9 +25,12 @@
 <nav id="sidebar">
     <ul class="sidebar-nav">
      <li><i class="pi pi-check" style="font-size: 2rem"></i></li>
-     <li><i class="pi pi-book" style="font-size: 2rem"></i></li>
-     <li><i class="pi pi-cog" style="font-size: 2rem"></i></li>
- 
+     <li><button pButton pRipple type="button" icon="pi pi-book" (click)="printViewTicket()" class="p-button-rounded p-button-text"></button>
+       </li>
+     <li>
+        <button pButton pRipple type="button" icon="pi pi-cog" (click)="loadSupplierMaster()" class="p-button-rounded p-button-text"></button>
+    
+    </li>
     </ul>
 </nav>
 
@@ -48,3 +51,152 @@
 
             </div>
     </header>
+
+
+
+    
+
+<p-dialog #dt header="Print/View Weightment" [(visible)]="showPrintView"  [style]="{width: '90%'}" >
+    
+    <p-table [value]="data"    dataKey="ReceiptNo" [paginator]="true" [rows]="5" [showCurrentPageReport]="true" 
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[5,10,25,50]"
+    [globalFilterFields]="['ReceiptNo','TruckNumber','Purchaser','Supplier']"
+    >
+    
+    <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 3rem"></th>
+                <th>Receipt No</th>
+                <th>Vehicle No</th>
+                <th>Purchaser</th>
+                <th>Supplier</th>
+                <th>GrossWeight</th>
+                <th>TareWeight</th>
+                <th>Net Weight</th>
+                <th>Time</th>
+                <th> Print</th>
+            </tr>
+            <tr>
+                <th>
+                   
+                </th>
+                <th>
+                    <p-columnFilter type="text" field="ReceiptNo"></p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter type="text" field="TruckNumber"></p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter type="text" field="Purchaser"></p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter type="text" field="Supplier"></p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter type="text" field="GrossWeight"></p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter type="text" field="TareWeight"></p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter type="text" field="NetWeight"></p-columnFilter>
+                </th>
+                <th>
+                   
+                </th>
+                <th>
+                   
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-data let-expanded="expanded">
+            <tr [pSelectableRow]="data">
+                <td>
+                    <button type="button" pButton pRipple [pRowToggler]="data" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                </td>
+                <td>{{data.ReceiptNo}}</td>
+                <td>{{data.TruckNumber}}</td>
+                <td>{{data.Purchaser}}</td>
+                <td>{{data.Supplier}}</td>
+                <td>{{data.GrossWeight}}</td>
+                <td>{{data.TareWeight}}</td>
+                <td>{{data.NetWeight}}</td>
+                <td>{{data.firstWeightTime}}</td>
+                <td>
+                    <button type="button" pButton pRipple icon="pi pi-print"  class="p-button-text p-button-rounded" (click)="printTicket(data.ReceiptNo)"></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="rowexpansion" let-data>
+            <tr>
+                <td colspan="10">
+                    <table>
+                        <tr>
+                            <td> 
+                                <span *ngIf="data.firstWeightImage1">
+                                    <img id="img" src="{{ data.firstWeightImage1 }}">
+                                </span>
+                                <span *ngIf="data.firstWeightImage2">
+                                    <img id="img" src="{{ data.firstWeightImage2 }}">
+                                </span>
+                                <span *ngIf="data.secondWeightImage1">
+                                    <img id="img" src="{{ data.secondWeightImage1 }}">
+                                </span>
+                                <span *ngIf="data.secondWeightImage2">
+                                    <img id="img" src="{{ data.secondWeightImage2 }}">
+                                </span>
+                            </td>
+                                
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    
+
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" (click)="showPrintView=false" label="Close" styleClass="p-button-text"></p-button>
+    </ng-template>
+
+</p-dialog>
+
+<p-dialog #dt1 header="Supplier Master" [(visible)]="showPartyMaster"  [style]="{width: '90%'}" >
+    
+    <span class="p-float-label">
+        <input id="float-input" type="text" pInputText [(ngModel)]="supplier"> 
+        <label for="float-input">Enter new Supplier</label>
+    </span>
+
+    <button pButton type="button" label="Add" (click)="insertIntoSupplier()" ></button>
+
+
+    <p-table [value]="supplierMasterValues"  [paginator]="true" [rows]="5" [showCurrentPageReport]="true" 
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[5,10,25,50]">
+
+    <ng-template pTemplate="header">
+        <tr>
+           
+            <th>Value</th>
+            <th>Delete</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-value>
+        <tr>
+            <td>{{value.DataValue}}</td>
+            <td>
+                <button type="button" pButton pRipple icon="pi pi-trash"  class="p-button-text p-button-rounded" (click)="deleteSupplier(value.DataValue)"></button>
+            </td>
+        </tr>
+    </ng-template>
+    >
+
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" (click)="showPartyMaster=false" label="Close" styleClass="p-button-text"></p-button>
+    </ng-template>
+
+    </p-table>
+
+    
+</p-dialog>

@@ -37,15 +37,15 @@
                             <div class="p-d-block p-mx-auto">
                                 <button pButton pRipple type="button" label="1st Weight" 
                                 [disabled]="(isSecondWeight || isManualWeight)"
-                                style="width:150px" (click)="onFirstWeightClick()"
+                                style="width:120px" (click)="onFirstWeightClick()"
                                     class="p-mr-2 p-mb-2"></button>
                                 <button pButton pRipple type="button"
-                                    label="2nd Weight" style="width:150px" class="p-mr-2 p-mb-2"
+                                    label="2nd Weight" style="width:120px" class="p-mr-2 p-mb-2"
                                     [disabled]="(isFirstWeight || isManualWeight)"
                                     (click)="onSecondWeightClick()"></button>
                                 <button pButton pRipple type="button" (click)="onManualWeightClick()"
                                     [disabled]="(isFirstWeight || isSecondWeight)"
-                                    label="Manual" style="width:150px"
+                                    label="Manual" style="width:120px"
                                     
                                     class="p-mr-2 p-mb-2"></button>
 
@@ -84,7 +84,8 @@
                         <div class="p-field p-grid">
                             <label for="supplier" class="p-col-fixed" style="width:150px">Supplier : </label>
                             <div class="p-col">
-                                <input id="Supplier" type="text" [disabled]="!isAnyButtonClicked()" [(ngModel)]="supplier"  pInputText>
+                                <p-dropdown [options]="supplierMasterValues" [disabled]="!isAnyButtonClicked()" [(ngModel)]="supplier" editable="true" ></p-dropdown>
+
                             </div>
                         </div>
                         <div class="p-field p-grid">

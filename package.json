@@ -34,6 +34,7 @@
     "jsmpeg": "^1.0.0",
     "jsmpeg-player": "^3.0.3",
     "knex": "^0.21.12",
+    "moment": "^2.29.1",
     "node-rtsp-stream": "0.0.9",
     "popper.js": "^1.16.1",
     "primeflex": "^2.0.0",

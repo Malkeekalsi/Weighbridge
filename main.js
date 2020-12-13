@@ -7,6 +7,23 @@ let db = new sqlite3.Database('./DB/_database.sqlite');
 const url = require('url')
 const os = require('os')
 var hogan = require("hogan.js");
+const moment = require('moment');
+
+
+function dateFromUTC( dateAsString, ymdDelimiter ) {
+  var pattern = new RegExp( "(\\d{4})" + ymdDelimiter + "(\\d{2})" + ymdDelimiter + "(\\d{2}) (\\d{2}):(\\d{2}):(\\d{2})" );
+  var parts = dateAsString.match( pattern );
+
+  return  moment(new Date(
+    parseInt( parts[1] )
+  , parseInt( parts[2], 10 ) - 1
+  , parseInt( parts[3], 10 )
+  , parseInt( parts[4], 10 )
+  , parseInt( parts[5], 10 )
+  , parseInt( parts[6], 10 )
+  , 0
+  )).format('DD/MM/YYYY hh:mm:ss a');
+}
 
 function createWindow () {
   // Create the browser window.
@@ -73,28 +90,44 @@ function createWindow () {
 */
 
 var template = `
-<h2 style="text-align: center;margin: 2px;"><strong>Kalsi Computerized Dharam Kanda</strong></h2>
+<html><head><style>
+tr.border_bottom td {
+    border-bottom: 1px dashed black;
+  }
+
+  tr.left_rightBorder td {
+    border-left: 1px dashed black;
+    border-right: 1px dashed black;
+     
+  }
+  </style></head><body><h2 style="text-align: center;margin: 2px;"><strong>Kalsi Computerized Dharam Kanda</strong></h2>
 <div style="text-align: center;"><strong>Mehar Chand road, Gurdaspur, Punjab</strong></div>
 <div style="text-align: center;"><strong>Tel: 9814049491, 9781349491</strong></div>
-<p style="margin: 2px;"><strong>&nbsp;</strong></p>
+<p style="margin: 2px;"><strong style="
+    margin-left: 100px;
+    font-size: 15px;
+">1st Weight</strong></p>
 <div style="
     padding: 2px;
     border: 1px solid;
 ">
-<table style="width: 80%; margin-left: auto; margin-right: auto;    margin-bottom: 8px;">
+<table style="width: 80%;margin-left: auto;margin-right: auto;margin-bottom: 8px;font-size: 13px;">
    <tbody>
       <tr>
          <td width="25%">
             <p style="text-align: left;">Serial No :</p>
          </td>
-         <td width="25%"
-            <p>{{ReceiptNo}}</p>
+         <td width="25%" <p="" style="
+    font-weight: bold;
+">{{ReceiptNo}}<p></p>
          </td>
          <td width="25%">
             <p style="text-align: left;">Vehicle No.</p>
          </td>
          <td width="25%">
-            <p>{{TruckNumber}}</p>
+            <p style="
+    font-weight: bold;
+">{{TruckNumber}}</p>
          </td>
       </tr>
       <tr>
@@ -125,17 +158,28 @@ var template = `
        </tbody>
 </table>
 {{#printTicket1}}
-<table style="width: 65%; margin-left: auto; margin-right: auto;    margin-bottom: 8px;">
+<table style="width: 65%;margin-left: auto;margin-right: auto;border: 1px dashed black;border-top: none;margin-bottom: 8px;font-size: 15px;font-weight: bold;border-left: none;border-right: none;">
    <tbody>
 
-      <tr>
-         <td width="25%">
+    <tr class="border_bottom" style="font-weight: normal;">
+      <td width="25%"></td>
+      <td width="25%"> <p style="text-align: right;"> Weight in Kg </p></td>
+      <td width="25%"> <p style="text-align: center;"> Date and Time</p></td>
+    </tr>
+      <tr style="
+    /* border-left: 1px solid; */
+">
+         <td width="25%" style="
+    /* border: 1px solid; */    border-left: 1px dashed black;
+
+">
             <p style="text-align: right;">{{weightLabel}} Weight :</p>
          </td>
          <td width="25%">
             <p style="text-align: right;">{{weightValue}}</p>
          </td>
-         <td width="50%">
+         <td width="50%" style="    border-right: 1px dashed black;
+         ">
             <p style="text-align: center;">{{firstWeightTime}}</p>
          </td>
       </tr>
@@ -144,39 +188,49 @@ var template = `
 {{/printTicket1}}
 
 {{#printTicketManual}}
-<table style="width: 65%; margin-left: auto; margin-right: auto;    margin-bottom: 8px;">
+<table style="width: 65%;margin-left: auto;margin-right: auto;border: 1px dashed black;border-top: none;margin-bottom: 8px;font-size: 15px;font-weight: bold;border-left: none;border-right: none;">
     <tbody>
 
-    <tr>
-      <td width="25%">
+    <tr class="border_bottom" style="font-weight: normal;">
+      <td width="25%"></td>
+      <td width="25%"> <p style="text-align: right;"> Weight in Kg </p></td>
+      <td width="25%"> <p style="text-align: center;"> Date and Time</p></td>
+    </tr>
+
+    <tr class="border_bottom">
+      <td width="25%" style="    border-left: 1px dashed black;
+
+    /* border-right: 1px solid; */
+">
           <p style="text-align: right;">Gross Weight :</p>
       </td>
       <td width="25%">
           <p style="text-align: right;">{{GrossWeight}}</p>
       </td>
-      <td width="50%">
+      <td width="50%" style="    border-right: 1px dashed black;
+      ">
           <p style="text-align: center;">{{firstWeightTime}}</p>
       </td>
     </tr>
-    <tr>
-      <td width="25%">
+    <tr class="border_bottom">
+      <td width="25%" style="    border-left: 1px dashed black;">
           <p style="text-align: right;">Tare Weight :</p>
       </td>
       <td width="25%">
           <p style="text-align: right;">{{TareWeight}}</p>
       </td>
-      <td width="50%">
+      <td width="50%" style="    border-right: 1px dashed black;">
           <p style="text-align: center;">{{firstWeightTime}}</p>
       </td>
     </tr>
     <tr>
-      <td width="25%">
+      <td width="25%" style="    border-left: 1px dashed black;">
           <p style="text-align: right;">Net Weight :</p>
       </td>
       <td width="25%">
           <p style="text-align: right;">{{NetWeight}}</p>
       </td>
-      <td width="50%">
+      <td width="50%" style="    border-right: 1px dashed black;">
           <p><strong>&nbsp;</strong></p>
       </td>
     </tr>
@@ -184,10 +238,7 @@ var template = `
 </table>
 {{/printTicketManual}}
 
-</div>
-<br/>
-
-<table style=" margin-left: auto; margin-right: auto;">
+<br><table style=" margin-left: auto; margin-right: auto;">
    <tbody>
       <tr>
          <td style="width: 50%;"> <img id="img" src="{{ firstWeightImage1 }}"></td>
@@ -195,32 +246,44 @@ var template = `
       </tr>
    </tbody>
 </table>
-<br/>
+
+<div style="font-size: 8px;text-align:center;margin-top=1px;" >Note: No responsibility accepted once the Vehicle leaves the Weighbridge. </div >
+</div>
+
+
+
+<br>
 
 {{#printTicket2}}
-<br/>
+<br>
 <h2 style="text-align: center;margin: 2px;"><strong>Kalsi Computerized Dharam Kanda</strong></h2>
 <div style="text-align: center;"><strong>Mehar Chand road, Gurdaspur, Punjab</strong></div>
 <div style="text-align: center;"><strong>Tel: 9814049491, 9781349491</strong></div>
-<p style="margin: 2px;"><strong>&nbsp;</strong></p>
+<p style="margin: 2px;"><strong style="
+    margin-left: 100px;
+    font-size: 15px;
+">2nd Weight</strong></p>
 <div style="
     padding: 2px;
     border: 1px solid;
 ">
-<table style="width: 80%; margin-left: auto; margin-right: auto;    margin-bottom: 8px;">
+<table style="width: 80%;margin-left: auto;margin-right: auto;margin-bottom: 8px;font-size: 13px;">
    <tbody>
       <tr>
          <td width="25%">
             <p style="text-align: left;">Serial No :</p>
          </td>
-         <td width="25%"
-            <p>{{ReceiptNo}}</p>
+         <td width="25%" <p="" style="
+    font-weight: bold;
+">{{ReceiptNo}}<p></p>
          </td>
          <td width="25%">
             <p style="text-align: left;">Vehicle No.</p>
          </td>
          <td width="25%">
-            <p>{{TruckNumber}}</p>
+            <p style="
+    font-weight: bold;
+">{{TruckNumber}}</p>
          </td>
       </tr>
       <tr>
@@ -250,48 +313,50 @@ var template = `
       </tr>
        </tbody>
 </table>
-<table style="width: 65%; margin-left: auto; margin-right: auto;    margin-bottom: 8px;">
+<table style="width: 65%;margin-left: auto;margin-right: auto;border: 1px dashed black;border-top: none;margin-bottom: 8px;font-size: 15px;font-weight: bold;border-left: none;border-right: none;">
     <tbody>
 
-    <tr>
-      <td width="25%">
+    <tr class="border_bottom" style="font-weight: normal;">
+      <td width="25%"></td>
+      <td width="25%"> <p style="text-align: right;"> Weight in Kg </p></td>
+      <td width="25%"> <p style="text-align: center;"> Date and Time</p></td>
+    </tr>
+    <tr class="border_bottom">
+      <td width="25%" style="    border-left: 1px dashed black;">
           <p style="text-align: right;">Gross Weight :</p>
       </td>
       <td width="25%">
           <p style="text-align: right;">{{GrossWeight}}</p>
       </td>
-      <td width="50%">
+      <td width="50%" style="    border-right: 1px dashed black;">
           <p style="text-align: center;">{{grossWeightTime}}</p>
       </td>
     </tr>
-    <tr>
-      <td width="25%">
+    <tr class="border_bottom">
+      <td width="25%" style="    border-left: 1px dashed black;">
           <p style="text-align: right;">Tare Weight :</p>
       </td>
       <td width="25%">
           <p style="text-align: right;">{{TareWeight}}</p>
       </td>
-      <td width="50%">
+      <td width="50%" style="    border-right: 1px dashed black;">
           <p style="text-align: center;">{{tareWeightTime}}</p>
       </td>
     </tr>
     <tr>
-      <td width="25%">
+      <td width="25%" style="    border-left: 1px dashed black;">
           <p style="text-align: right;">Net Weight :</p>
       </td>
       <td width="25%">
           <p style="text-align: right;">{{NetWeight}}</p>
       </td>
-      <td width="50%">
+      <td width="50%" style="    border-right: 1px dashed black;">
           <p><strong>&nbsp;</strong></p>
       </td>
     </tr>
     </tbody>
 </table>
-</div>
-<br/>
-
-<table style=" margin-left: auto; margin-right: auto;">
+<br><table style=" margin-left: auto; margin-right: auto;">
    <tbody>
       <tr>
          <td style="width: 50%;"> <img id="img" src="{{ secondWeightImage1 }}"></td>
@@ -299,11 +364,58 @@ var template = `
       </tr>
    </tbody>
 </table>
-{{/printTicket2}}
 
+<div style="font-size: 8px;text-align:center;margin-top=1px;" >Note: No responsibility accepted once the Vehicle leaves the Weighbridge. </div >
+
+
+
+{{/printTicket2}}</body></html>
 `;
 var hello = hogan.compile(template);
 
+
+ipcMain.on("loadAllData", function (event, arg) {
+  db.all('Select * from WeightData order by ReceiptNo desc', (err, results) => {
+    if (err) {
+      mainWindow.webContents.send("errorMessage","Some error while getting data for second weight"+ err.message)
+      console.log(err)
+    } else {
+      event.returnValue=results;
+    }
+  })
+});
+
+
+ipcMain.on("insertSupplier", function (event, arg) {
+  db.run('insert into SupplierMaster(DataValue) values (?)',arg, (err) => {
+    if (err) {
+      mainWindow.webContents.send("errorMessage","Some error"+ err.message)
+      console.log(err)
+    }
+    event.returnValue=1;
+  })
+});
+
+ipcMain.on("deleteSupplier", function (event, arg) {
+  db.run('delete from SupplierMaster where DataValue=?',arg, (err) => {
+    if (err) {
+      mainWindow.webContents.send("errorMessage","Some error"+ err.message)
+      console.log(err)
+    }
+    event.returnValue=1;
+  })
+});
+
+ipcMain.on("loadSupplierData", function (event, arg) {
+  db.all('Select * from SupplierMaster', (err, results) => {
+    if (err) {
+      mainWindow.webContents.send("errorMessage","Some error while getting data for second weight"+ err.message)
+      console.log(err)
+    } else {
+      event.returnValue=results;
+    }
+  })
+});
 
   ipcMain.on("loadWeight2Data", function (event, arg) {
     db.all('Select * from WeightData where isFinalWeight=0 and isManualWeight=0 order by ReceiptNo desc', (err, results) => {
@@ -356,11 +468,11 @@ var hello = hogan.compile(template);
 
    ipcMain.on("SaveData",(kalsi,store) => {
       if(store.isFirstWeight || store.isManualWeight){
-        query=`INSERT INTO WeightData (ReceiptNo,GrossWeight,TareWeight,NetWeight,isfirstWeight,isManualWeight,isFinalWeight,WeightType,TruckNumber,Purchaser,Supplier,User,charges,firstWeightTime,firstWeightImage1,firstWeightImage2,Material) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP,?,?,?)`;
+        query=`INSERT INTO WeightData (ReceiptNo,GrossWeight,TareWeight,NetWeight,isfirstWeight,isManualWeight,isFinalWeight,WeightType,TruckNumber,Purchaser,Supplier,User,charges,firstWeightTime,firstWeightImage1,firstWeightImage2,Material) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,datetime('now','localtime'),?,?,?)`;
         values = [store.receiptNo,store.grossWeight,store.tareWeight,store.netWeight,store.isFirstWeight,store.isManualWeight,store.isSecondWeight,store.weightType,store.truckNumber,store.purchaser,store.supplier,store.user,store.charges,store.imageData1,store.imageData2,store.material]
   
       }else if(store.isSecondWeight){
-        query=`Update WeightData set GrossWeight=?,TareWeight=?,NetWeight=?,isFinalWeight=?,secondWeightTime=CURRENT_TIMESTAMP,secondWeightImage1=?,secondWeightImage2=? where ReceiptNo=?`;
+        query=`Update WeightData set GrossWeight=?,TareWeight=?,NetWeight=?,isFinalWeight=?,secondWeightTime=datetime('now','localtime'),secondWeightImage1=?,secondWeightImage2=? where ReceiptNo=?`;
         values = [store.grossWeight,store.tareWeight,store.netWeight,true,store.imageData1,store.imageData2,store.receiptNo]
       }
 
@@ -391,6 +503,15 @@ var hello = hogan.compile(template);
           console.log(err)
         } else {
           values=results[0];
+
+          if(values.firstWeightTime){
+            values.firstWeightTime=dateFromUTC(values.firstWeightTime,'-')
+          }
+          if(values.secondWeightTime){
+            values.secondWeightTime=dateFromUTC(values.secondWeightTime,'-')
+          }
+          
+
 
           if(values.isfirstWeight && !values.isFinalWeight ){
             values.printTicket1="printTicket1";
