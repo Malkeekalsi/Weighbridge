@@ -9,13 +9,13 @@
                         <div class="p-field p-grid">
                             <label for="grossWeight" class="p-col-fixed" style="width:150px">Gross Weight : </label>
                             <div class="p-col">
-                                <input id="grossWeight" type="text" disabled="true" style="text-align: right;" [(ngModel)]="grossWeight" pInputText>
+                                <input id="grossWeight" type="text" [disabled]="true" style="text-align: right;" [(ngModel)]="grossWeight" pInputText (ngModelChange)="calculateNetWeight($event,'GROSS')">
                             </div>
                         </div>
                         <div class="p-field p-grid">
                             <label for="tareWeight" class="p-col-fixed" style="width:150px">Tare Weight : </label>
                             <div class="p-col">
-                                <input id="tareWeight" type="text" disabled="true" style="text-align: right;" [(ngModel)]="tareWeight" pInputText>
+                                <input id="tareWeight" type="text" [disabled]="!isManualWeight && !weightType" style="text-align: right;" [(ngModel)]="tareWeight" pInputText (ngModelChange)="calculateNetWeight($event,'TARE')">
                             </div>
                             
                         </div>
@@ -45,7 +45,7 @@
                                     (click)="onSecondWeightClick()"></button>
                                 <button pButton pRipple type="button" (click)="onManualWeightClick()"
                                     [disabled]="(isFirstWeight || isSecondWeight)"
-                                    label="Manual" style="width:120px"
+                                    label="Manual" style="width:120px" 
                                     
                                     class="p-mr-2 p-mb-2"></button>
 
@@ -84,7 +84,8 @@
                         <div class="p-field p-grid">
                             <label for="supplier" class="p-col-fixed" style="width:150px">Supplier : </label>
                             <div class="p-col">
-                                <p-dropdown [options]="supplierMasterValues" [disabled]="!isAnyButtonClicked()" [(ngModel)]="supplier" editable="true" ></p-dropdown>
+                              
+								<input id="purchaser" type="text" [disabled]="!isAnyButtonClicked()" [(ngModel)]="supplier" pInputText>
 
                             </div>
                         </div>

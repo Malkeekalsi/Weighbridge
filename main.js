@@ -26,6 +26,8 @@ function dateFromUTC( dateAsString, ymdDelimiter ) {
 }
 
 function createWindow () {
+	
+	
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     show: false,
@@ -46,11 +48,19 @@ function createWindow () {
   }
 });
 
+mainWindow.on('closed', () => {
+	
+	cam1FFMpedStream.removeListener('data', cam1Feed );   
+	cam2FFMpedStream.removeListener('data', cam2Feed );   
+	app.quit()
+	
+});
   // and load the index.html of the app.
   mainWindow.loadFile('dist/index.html')
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  //mainWindow.webContents.openDevTools()
+  console.log(mainWindow.webContents.getPrinters())
 
  /* db.run(`create table WeightData
   (
@@ -100,7 +110,7 @@ tr.border_bottom td {
     border-right: 1px dashed black;
      
   }
-  </style></head><body><h2 style="text-align: center;margin: 2px;"><strong>Kalsi Computerized Dharam Kanda</strong></h2>
+  </style></head><body><h2 style="text-align: center;margin: 2px;"><strong>Kalsi Computerized Weighbridge</strong></h2>
 <div style="text-align: center;"><strong>Mehar Chand road, Gurdaspur, Punjab</strong></div>
 <div style="text-align: center;"><strong>Tel: 9814049491, 9781349491</strong></div>
 <p style="margin: 2px;"><strong style="
@@ -256,7 +266,7 @@ tr.border_bottom td {
 
 {{#printTicket2}}
 <br>
-<h2 style="text-align: center;margin: 2px;"><strong>Kalsi Computerized Dharam Kanda</strong></h2>
+<h2 style="text-align: center;margin: 2px;"><strong>Kalsi Computerized Weighbridge</strong></h2>
 <div style="text-align: center;"><strong>Mehar Chand road, Gurdaspur, Punjab</strong></div>
 <div style="text-align: center;"><strong>Tel: 9814049491, 9781349491</strong></div>
 <p style="margin: 2px;"><strong style="
@@ -559,7 +569,9 @@ ipcMain.on("loadSupplierData", function (event, arg) {
    }).catch(error => {
      mainWindow.webContents.send("errorMessage",`Failed to write PDF to ${pdfPath}: `+ error.message)
      console.log(`Failed to write PDF to ${pdfPath}: `, error)
-   })
+   });
+   
+   win.webContents.print({silent: true});
   });
 
 
@@ -597,15 +609,15 @@ var rtsp = require("rtsp-ffmpeg");
 const { data } = require('jquery');
 
 var cam1FFMpedStream = new rtsp.FFMpeg({
-  input: "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov",
+  input: "rtsp://kalsi:kalsi123@192.168.1.6:554/cam/realmonitor?channel=6&subtype=0",
   rate: 1,
-  resolution: "260x210"
+  resolution: "300x210"
 });
 
 var cam2FFMpedStream = new rtsp.FFMpeg({
-  input: "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov",
+  input: "rtsp://kalsi:kalsi123@192.168.1.6:554/cam/realmonitor?channel=7&subtype=0",
   rate: 1,
-  resolution: "260x210"
+  resolution: "300x210"
 });
 
 

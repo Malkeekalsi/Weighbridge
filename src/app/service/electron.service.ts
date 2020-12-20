@@ -25,7 +25,7 @@ export class ElectronService {
   fs: typeof fs;
 
 
-  public weightData = new BehaviorSubject<number>(100);
+  public weightData = new BehaviorSubject<number>(0);
 
   constructor() {
 

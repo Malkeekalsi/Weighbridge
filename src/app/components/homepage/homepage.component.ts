@@ -98,7 +98,7 @@ export interface TicketData {
       let supplierMasterValues1= this.electronService.ipcRenderer.sendSync("loadSupplierData")
       this.supplierMasterValues=[];
       supplierMasterValues1.forEach(element => {
-        this.supplierMasterValues.push({label: element, value: element});
+        this.supplierMasterValues.push({label: element.DataValue, value: element.DataValue});
       });
     }
 
@@ -141,6 +141,13 @@ export interface TicketData {
       this.isManualWeight=true;
       this.isSecondWeight=false;
       this.receiptNo=this.getNextReceiptNo();
+	  
+	  this.grossWeight=this.electronService.weightData.value+"";
+      this.tareWeight="";
+	  
+	  
+      this.imageDataSave1=this.imageData;
+      this.imageDataSave2=this.imageData1;
     }
 
     supplierMasterValues: any[];
@@ -186,6 +193,8 @@ export interface TicketData {
         this.grossWeight=this.tareWeight;
         this.tareWeight="";
       }
+	    this.netWeight="";
+	  
     }
 
     onSave(){
@@ -265,5 +274,24 @@ export interface TicketData {
       return nextid;
     }
 
+	calculateNetWeight(value,src){
+		if(this.isManualWeight){
+		 if(this.weightType && src=='TARE'){
+			this.grossWeight= this.electronService.weightData.value+"";
+		  }else if(src=='GROSS'){
+			this.tareWeight= this.electronService.weightData.value+"";
+		  }
+
+		  let tareNum=Number(this.tareWeight);
+		  let grossNum=Number(this.grossWeight);
+			
+	
+		  if(tareNum>=grossNum){
+			this.netWeight=(tareNum-grossNum)+"";
+		  }else{
+			this.netWeight=(grossNum-tareNum)+"";
+		  }
+		}	  
+	}
 
   }
